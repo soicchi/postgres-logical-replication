@@ -1,0 +1,39 @@
+services:
+  publisher:
+    image: postgres:16.0
+    container_name: publisher
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: publisher-db
+    ports:
+      - 5433:5432
+    networks:
+      - pg_network
+    volumes:
+      - publisher_data:/var/lib/postgresql/data
+      # - ./publisher-init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  subscriber:
+    image: postgres:16.0
+    container_name: subscriber
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: subscriber-db
+    ports:
+      - 5434:5432
+    networks:
+      - pg_network
+    volumes:
+      - subscriber_data:/var/lib/postgresql/data
+      # - ./subscriber-init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  pg_network:
+
+volumes:
+  publisher_data:
+  subscriber_data:
